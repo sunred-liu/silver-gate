@@ -1,0 +1,16 @@
+# 统一行尾为 LF。
+# 这不是风格问题：build.js 写出的 www/index.html 是 LF，漂移哨兵按字节 md5 比对。
+# 若 Windows 检出时被转成 CRLF，`node test/check.js` 会误报 BUILD_DRIFT，CI 直接红。
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.mp3 binary
+*.mp4 binary
+*.apk binary
+*.woff binary
+*.woff2 binary
