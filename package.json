@@ -1,0 +1,26 @@
+{
+  "name": "silver-gate",
+  "version": "0.9.0",
+  "private": true,
+  "description": "银之门 — 单文件 AI 版克苏鲁跑团（CoC）App / Single-file AI-keeper Call of Cthulhu tabletop app",
+  "keywords": [
+    "call-of-cthulhu",
+    "coc",
+    "tabletop",
+    "trpg",
+    "single-file",
+    "offline-first",
+    "ai-keeper",
+    "vtt"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node build.js",
+    "check": "node test/check.js",
+    "drift": "node build.js --check",
+    "serve": "npx --yes serve www"
+  }
+}

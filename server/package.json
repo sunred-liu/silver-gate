@@ -1,0 +1,15 @@
+{
+  "name": "silver-gate-server",
+  "version": "1.0.0",
+  "description": "银之门 COC 联机后端：REST 鉴权 + WebSocket 房间实时同步",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "puppeteer-core": "^25.9.0",
+    "ws": "^8.18.0"
+  }
+}

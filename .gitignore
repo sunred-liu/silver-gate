@@ -1,0 +1,34 @@
+# 依赖
+node_modules/
+.pnpm-store/
+
+# 构建产物之外的临时物
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# 本地数据 / 密钥（绝不入库）
+server/data/
+server/.env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.jwt_secret
+
+# Android / Capacitor 本地产物
+android/
+android/app/build/
+*.apk
+*.aab
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+
+# 截图脚本的临时输出
+shots-tmp/
+visual_shots/db/

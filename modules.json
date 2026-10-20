@@ -1,0 +1,153 @@
+{
+  "$comment": "银之门前端模块清单（方案 C）。www/index.html 是构建产物，勿手改；改 src/ 后跑 node build.js。",
+  "shell": "src/index.shell.html",
+  "out": "www/index.html",
+  "order": [
+    "m0-core",
+    "m1-character",
+    "m2-dice",
+    "m3-ai",
+    "m4-content",
+    "m5-net",
+    "m6-map",
+    "m7-qr"
+  ],
+  "modules": {
+    "m0-core": {
+      "file": "src/m0-core.js",
+      "layer": 0,
+      "name": "核心底座",
+      "desc": "全局状态 / DOM 助手 / 消息与骰子渲染 / 日期工具。全项目唯一的叶子模块，谁都可以依赖它。",
+      "depends": [
+        "m5-net"
+      ],
+      "chunks": [
+        "state",
+        "helpers",
+        "renderers",
+        "date"
+      ]
+    },
+    "m2-dice": {
+      "file": "src/m2-dice.js",
+      "layer": 1,
+      "name": "骰子与检定",
+      "desc": "COC 检定掷骰（含奖励/惩罚骰）与 AI 通用掷骰/消息构造。",
+      "depends": [
+        "m0-core"
+      ],
+      "chunks": [
+        "coc",
+        "ai"
+      ]
+    },
+    "m7-qr": {
+      "file": "src/m7-qr.js",
+      "layer": 1,
+      "name": "QR 编码器",
+      "desc": "零依赖极简 QR 编码器（byte 模式 + 纠错 M + v1-9 + 8 掩码按 ISO 18004 罚分择优）。出边 0，最自包含。",
+      "depends": [],
+      "chunks": [
+        "encoder"
+      ]
+    },
+    "m1-character": {
+      "file": "src/m1-character.js",
+      "layer": 2,
+      "name": "角色",
+      "desc": "建卡与属性掷骰、年龄调整、角色卡 JSON 导入导出、卡面/抽屉 UI、角色对象装配、生命周期（五标签位 / 命运残片 / 离线成长 / 字段回填 / 幕间成长 / T1–T5 阶层）。【已知反向边】骰子面板 doRoll 要通知本地 Keeper（m3-ai）；卡面/抽屉的「战术地图定位」按钮要调 focusCharOnMap（m6-map）。这两条是真实运行时调用，登记在此而非隐藏；彻底解开需引入事件总线或把这两个 UI 回调上移到 M8 app —— 留待批次⑤/⑥。",
+      "depends": [
+        "m0-core",
+        "m2-dice",
+        "m3-ai",
+        "m6-map",
+        "m5-net"
+      ],
+      "chunks": [
+        "cheka",
+        "backup",
+        "drawer",
+        "objects",
+        "lifecycle-motto",
+        "tags",
+        "fragments",
+        "backfill",
+        "growth"
+      ]
+    },
+    "m4-content": {
+      "file": "src/m4-content.js",
+      "layer": 1,
+      "name": "内容",
+      "desc": "内置可玩剧本常量、本地剧本数据库（localStorage）、剧本浏览与筛选（module library）。",
+      "depends": [
+        "m0-core"
+      ],
+      "chunks": [
+        "scenarios",
+        "library"
+      ]
+    },
+    "m6-map": {
+      "file": "src/m6-map.js",
+      "layer": 3,
+      "name": "战棋地图",
+      "desc": "战棋：地图状态与墙体/障碍/困难地形编辑（含撤销）、地形图层与缩放平移、舞台内缩、房间级 Token 权限、先攻与回合、条件标记、战损时间线、移动力、框选批量、PNG 导出；迷雾 + VBL 视线遮挡（视野多边形 / 通视判定）；Token 拖拽 / 测距路径 / 网格吸附；寻路（几何原语 → 网格图 → Dijkstra → 预算钳制）；可达区与墙体渲染；Token ↔ 角色卡双向跳转、模板预设库快速布署。",
+      "depends": [
+        "m0-core",
+        "m1-character",
+        "m5-net"
+      ],
+      "scanIgnore": {
+        "ck": "nav 分块内 const ck=cellKey(...) 是函数局部量；battlemap 的 data-ck 是 HTML 属性名、ch.dataset.ck 是属性访问 —— 三者都不是对 m1-character 顶层 ck 的引用。"
+      },
+      "chunks": [
+        "battlemap",
+        "vision",
+        "tokens",
+        "nav",
+        "overlay",
+        "presets"
+      ]
+    },
+    "m3-ai": {
+      "file": "src/m3-ai.js",
+      "layer": 3,
+      "name": "AI 引擎",
+      "desc": "前端 AI：统一 Provider 抽象（local 规则 / remote 大模型 + 本地兜底）、场景原型库（真相优先 + 三线索法则）、AI 守秘人 Keeper、AI 队友 Teammate（与服务端 MATE_OCC_CLASS / MATE_LINES_CLASS 同构的本地镜像）、设置面板与挂载、服务器大脑 SGAI（对接 server/ai-engine.js 的 /ai/* 契约）与三选一分派 brainStart。注：通用小工具 pick / rnd 目前物理上落在本模块的 provider 分块里，m1-character 的 fragments 也在用 —— 更合适的归宿是 m0-core，但那会挪动产物字节，留到后续批次做。",
+      "depends": [
+        "m0-core",
+        "m2-dice",
+        "m1-character",
+        "m5-net"
+      ],
+      "chunks": [
+        "provider",
+        "archetypes",
+        "shared",
+        "keeper",
+        "mate",
+        "panel",
+        "sgai"
+      ]
+    },
+    "m5-net": {
+      "file": "src/m5-net.js",
+      "layer": 2,
+      "name": "账号与网络",
+      "desc": "账号与网络基础设施：本地落盘（loadApp/saveApp/APP/me）+ 后端 API 接入（API_BASE/USE_API/apiFetch 对接 server/index.js）+ 角色卡 / 团本云端存档（按 updatedAt 做 LWW 合并、墓碑删除、快照比对触发同步）+ 联机房间 WebSocket 实时同步（wsConnect/wsOnMessage/wsSyncMap 广播地图 Token/墙体/视野）+ 登录注册 / 访客 / Token / JWT（showAuth/bootApp/openSharedCharFromUrl/createAccount/getToken/localSecret）。注意：本模块是「双向依赖」的枢纽——既调用 m1 的角色生命周期、m6 的地图状态、m4 的剧本种子，也被 m0 的渲染器（myName）、m1/m3/m6 的落盘/授权/联机调用反向引用，因此与 {m0-core, m1-character, m3-ai, m6-map} 共同构成依赖环（运行时无碍，构建仅作信息提示）。离线 token 只做本地门闩，签名密钥为每设备随机生成（localSecret），不随仓库分发。",
+      "depends": [
+        "m0-core",
+        "m1-character",
+        "m4-content",
+        "m6-map"
+      ],
+      "chunks": [
+        "data",
+        "account",
+        "auth",
+        "share"
+      ]
+    }
+  }
+}

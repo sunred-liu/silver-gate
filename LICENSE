@@ -1,0 +1,36 @@
+MIT License
+
+Copyright (c) 2026 Silver Gate contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+关于第三方内容的说明 / Third-party notice:
+
+本项目为个人非商业同人作品，与 Chaosium Inc. 无隶属关系。
+"Call of Cthulhu"、"克苏鲁的呼唤" 及相关规则体系的权利归 Chaosium Inc. 所有。
+
+本项目不包含任何商业模组的正文内容。内置剧本库仅保存
+「模组名称 / 系统 / 人数 / 时长 / 原站链接」等元数据，用于跳转到
+权利人授权的发布页（Chaosium、cnmods、Dicecho、BoardGameGeek 等）。
+
+This is a non-commercial fan project, not affiliated with Chaosium Inc.
+No commercial scenario text is bundled; the built-in library stores only
+metadata and links to the original publishers.
