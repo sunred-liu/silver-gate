@@ -26,6 +26,10 @@
 - 新增 [`docs/SECURITY.md`](docs/SECURITY.md)，如实公开已知缺陷（无盐 djb2 密码哈希、token 存 localStorage、`innerHTML` 拼接、缺 CSP）
 
 ### 修复
+- **补齐运行必需的静态资源**：`www/vendor/`（Tailwind 419KB + 字体 7.4MB）与 `www/bg/`（5 张背景图）
+  此前未随仓库分发，导致在 GitHub Pages 上样式与图标全部 404、页面只剩骨架。
+  README 中「单文件交付」的表述也已据实修正为「代码单 HTML + 同目录静态资源」。
+- **内联 SVG favicon**：静态托管与 `file://` 都会请求 `/favicon.ico`，此前每次打开都有一条 404。
 - **产物行尾统一为 LF**。此前 `build.js` 用 CRLF 拼产物，而 `.gitattributes` 强制 `eol=lf`，
   导致全新克隆后产物体积相差 7,616 字节，字节级漂移哨兵在 CI 上必然误报 `BUILD_DRIFT`
   （本地不报，因为本地文件从未经过一次真实检出）。现已改为 LF，并在比较前对两侧做行尾归一，

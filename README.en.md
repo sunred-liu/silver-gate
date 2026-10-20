@@ -2,7 +2,7 @@
 
 # Silver Gate
 
-**An AI-keeper Call of Cthulhu tabletop app that ships as a single HTML file.**
+**An AI-keeper Call of Cthulhu tabletop app whose entire codebase ships as one HTML file.**
 
 No framework · No runtime deps · Double-click to play · Built-in AI Keeper · 8-module dependency-graph-validating build
 
@@ -29,7 +29,7 @@ It started as "put my home game on my phone". Then it grew into something slight
 
 That sounds like over-engineering. It is. But it buys two real things:
 
-- **The deliverable is always one file** (`www/index.html`, 612KB). No node, no bundler, no CI needed to *run* it. Drop it on any static host, in a chat, or on a phone — it opens.
+- **All code lives in one HTML file** (`www/index.html`, 612KB: every module, every style, every view). No node, no bundler, no CI needed to *run* it. The style library, fonts and background art sit next to it as plain static files (see [Delivery shape](#delivery-shape)); if they're missing the UI degrades but the app still works.
 - **The source never turns into spaghetti.** Adding a feature? Edit `src/`, and the build tells you *"you used a symbol owned by `m6-map`, but `m3-ai` doesn't declare that dependency."* Not by convention — by failure.
 
 ---
@@ -46,7 +46,7 @@ That sounds like over-engineering. It is. But it buys two real things:
   ...
 依赖边: m0-core->m5-net  m1-character->m0-core  ...
   [info] 依赖环：m0-core ↔ m1-character ↔ ... (强连通分量 7 个模块，19 条边)
-产物: www/index.html  626363 B  md5=a585f992...
+产物: www/index.html  626848 B  md5=edcc8ba5...
 ```
 
 The cycle it prints is **real and not hidden**. `m0-core`'s renderer reads the logged-in username (owned by `m5-net`), and `m5-net` calls the renderer back. Fully decoupling needs an event bus — that's a bigger refactor. Rather than pretend the architecture is clean, the build prints the cycle every time, and `modules.json` documents each reverse edge with *which line, why, and which batch will fix it*.
@@ -109,8 +109,9 @@ modules.json ──────────┘        ↑
 
 | Metric | Value |
 |---|---|
-| Artifact | **626,363 B single file (~612KB)** |
-| Runtime deps | **0** |
+| Code artifact | **626,848 B single HTML (~612KB)** — all 8 modules, styles, views |
+| Static assets | `www/vendor/` 7.8MB (Tailwind 419KB + fonts 7.4MB) · `www/bg/` 11MB (5 backgrounds) |
+| Runtime deps | **0 npm packages** (Tailwind and fonts are local files, no CDN) |
 | Source | 8 modules / 35 chunks / 395 top-level symbols |
 | Build deps | Node ≥ 18 (only `fs`/`path`/`crypto`) |
 | Backend (optional) | `ws` + Node http |

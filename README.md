@@ -2,7 +2,7 @@
 
 # 银之门 · Silver Gate
 
-**一个跑在单个 HTML 文件里的 AI 版克苏鲁跑团（CoC）App**
+**一个把全部代码塞进单个 HTML 的 AI 版克苏鲁跑团（CoC）App**
 
 零框架 · 零构建依赖 · 双击即玩 · 自带 AI 守秘人 · 8 模块依赖图校验构建器
 
@@ -31,7 +31,7 @@
 
 这听起来像是过度设计。确实是。但这个"过度设计"换来了两件真实的好处：
 
-- **交付物永远是单文件**（`www/index.html`，612KB）。不装 node、不跑 bundler、不配 CI，扔到任何静态服务器/网盘/手机里都能开。你甚至可以把文件发给朋友，他双击就能看你的角色卡。
+- **代码全部在一个 HTML 里**（`www/index.html`，612KB 承载所有逻辑、样式与视图）。不装 node、不跑 bundler、不配 CI，扔到任何静态服务器/网盘/手机里都能开。样式库、字体、背景图作为同目录静态资源随附（见[交付形态](#-交付形态)），缺失时页面会降级但仍可操作。
 - **源码永远不会退化成意大利面**。想加功能？先改 `src/`，构建器会告诉你「你要用的这个符号属于 m6-map，但 m3-ai 没声明依赖它」。它不靠自觉，它靠报错。
 
 ---
@@ -57,7 +57,7 @@
 依赖边: m0-core->m5-net  m1-character->m0-core  m1-character->m2-dice  ...
   [info] 依赖环：m0-core ↔ m1-character ↔ m2-dice ↔ m3-ai ↔ m4-content ↔ m5-net ↔ m6-map
          （强连通分量 7 个模块，19 条边）
-产物: www/index.html  626363 B  md5=a585f992...
+产物: www/index.html  626848 B  md5=edcc8ba5...
 ```
 
 我最满意的是它**不假装自己是干净的**。上面那个 7 模块的依赖环是真实存在的：`m0-core` 的渲染器要读当前登录用户名（属于 `m5-net`），而 `m5-net` 又要调渲染器。真正的解耦需要事件总线或把 UI 回调上移一层，那是更大的重构。**与其把环藏起来，不如让构建器每次都把环打印出来**，并在 `modules.json` 里逐条登记反向边的成因（打开 `modules.json` 看 `m1-character.depends` 那段中文注释，写明了哪一行、为什么、留待哪个批次解决）。
@@ -89,13 +89,14 @@
 ### 最省事：双击
 
 ```bash
-git clone https://github.com/<your-name>/silver-gate.git
+git clone https://github.com/sunred-liu/silver-gate.git
 cd silver-gate
 open www/index.html        # macOS
 # start www\index.html     # Windows
 ```
 
-就这样。没有 `npm install`，没有 dev server。`www/index.html` 是**已构建好的产物**，开箱可玩。
+就这样。没有 `npm install`，没有 dev server。`www/index.html` 是**已构建好的产物**，开箱可玩；
+它需要的 `vendor/`（Tailwind + 字体）与 `bg/`（背景图）就在同目录，请连整个 `www/` 一起拷走。
 
 > ⚠️ 本地 `file://` 下部分浏览器会限制 `localStorage` 与 `fetch`。想要完整体验（含联机），用下面的静态服务方式。
 
@@ -130,13 +131,16 @@ modules.json ──────────┘        ↑
 
 | 指标 | 数值 |
 |---|---|
-| 产物体积 | **626,363 B（约 612KB）单文件** |
-| 运行时依赖 | **0**（无 npm 包、无 CDN 必需项） |
+| 代码产物 | **626,848 B（约 612KB）单 HTML**，含全部 8 模块、全部样式与视图 |
+| 静态资源 | `www/vendor/` 7.8MB（Tailwind 419KB + 字体 7.4MB）· `www/bg/` 11MB（5 张背景图） |
+| 运行时依赖 | **0 个 npm 包**（Tailwind 与字体是本地文件，不走 CDN） |
 | 源码模块 | 8 个 / 35 个分块 / 395 个顶层符号 |
 | 构建依赖 | Node ≥ 18（只用内置 `fs`/`path`/`crypto`） |
 | 后端（可选） | `ws` + Node http，约 240KB JS |
 
-产物为什么保持单文件：`www/index.html` 是 nginx、Capacitor(APK)、以及全部存量测试唯一读取的入口。让它保持单文件形态，拆分源码就**不需要**动缓存策略、不需要改 APK 配置、不需要重写任何测试。**改的是开发体验，不是交付物。**
+为什么代码保持单 HTML：`www/index.html` 是 nginx、Capacitor(APK)、以及全部存量测试唯一读取的入口。让它保持单文件形态，拆分源码就**不需要**动缓存策略、不需要改 APK 配置、不需要重写任何测试。**改的是开发体验，不是交付物。**
+
+为什么样式/字体/背景图没内联：Tailwind 全量构建 419KB、中文字体子集 7.4MB、背景图 11MB，全塞进 HTML 会变成 19MB 的单个文件，首屏解析反而更慢。它们在同目录下按相对路径引用，`www/` 整个目录拷走即可离线运行；只想换皮的话，删掉 `bg/` 也不会影响任何功能（背景层会退成纯色）。
 
 ---
 
