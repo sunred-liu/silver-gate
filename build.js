@@ -222,7 +222,11 @@ function run(options) {
   const missing = Object.keys(allChunks).filter(k => !hit.has(k));
   if (missing.length) throw new Error(`以下分块在骨架中没有落点：${missing.join(', ')}`);
 
-  const result = out.join('\r\n') + '\r\n';
+  /* 产物统一用 LF。原因不是审美：本仓库的漂移哨兵是「字节级 md5」，而 git 在检出时会把
+     text 文件规范成 core.eol / .gitattributes 指定的行尾。若这里写 CRLF，Windows 上构建
+     出的产物与 Linux 检出后的产物字节数就差 7616 字节，哨兵在 CI 上必然误报 BUILD_DRIFT。
+     产物是 HTML，LF 在所有浏览器里都是合法行尾，没有必须用 CRLF 的理由。 */
+  const result = out.join('\n') + '\n';
   const outPath = path.join(ROOT, man.out);
   const hash = crypto.createHash('md5').update(result, 'utf8').digest('hex');
   const bytes = Buffer.byteLength(result, 'utf8');
@@ -263,7 +267,10 @@ function run(options) {
     }
     const cur = fs.readFileSync(outPath);
     const curHash = crypto.createHash('md5').update(cur).digest('hex');
-    const same = cur.equals(Buffer.from(result, 'utf8'));
+    /* 比较前先把两侧行尾都归一成 LF。这样即使有人把 core.autocrlf 打开、检出了 CRLF，
+       哨兵也只对「内容是否漂移」报警，不被行尾噪音干扰。 */
+    const norm = b => String(b).replace(/\r\n/g, '\n');
+    const same = norm(cur) === norm(Buffer.from(result, 'utf8'));
     log(same ? `--check: ${man.out} 与 src/ 一致 (md5=${curHash})`
              : `--check: !! ${man.out} 与 src/ 不同 (磁盘=${curHash} 期望=${hash})`);
     return { hash, diskHash: curHash, bytes, outPath, drift: !same, existed: true };

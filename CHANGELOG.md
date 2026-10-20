@@ -25,6 +25,12 @@
 - `server/data/`、`.jwt_secret`、`*.env` 纳入 `.gitignore`
 - 新增 [`docs/SECURITY.md`](docs/SECURITY.md)，如实公开已知缺陷（无盐 djb2 密码哈希、token 存 localStorage、`innerHTML` 拼接、缺 CSP）
 
+### 修复
+- **产物行尾统一为 LF**。此前 `build.js` 用 CRLF 拼产物，而 `.gitattributes` 强制 `eol=lf`，
+  导致全新克隆后产物体积相差 7,616 字节，字节级漂移哨兵在 CI 上必然误报 `BUILD_DRIFT`
+  （本地不报，因为本地文件从未经过一次真实检出）。现已改为 LF，并在比较前对两侧做行尾归一，
+  `core.autocrlf` 打开时也不会误报。
+
 ### 已知问题
 - 7 模块依赖环未消解（`m0-core ↔ m1-character ↔ m2-dice ↔ m3-ai ↔ m4-content ↔ m5-net ↔ m6-map`）
 - `m5-net` 同时承担存储与网络，53KB，待拆

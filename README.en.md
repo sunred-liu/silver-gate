@@ -10,7 +10,7 @@ No framework · No runtime deps · Double-click to play · Built-in AI Keeper ·
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 [![CI](https://github.com/sunred-liu/silver-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/sunred-liu/silver-gate/actions/workflows/ci.yml)
-[![Single File](https://img.shields.io/badge/bundle-single%20HTML%20620KB-6f42c1.svg)](#-delivery-shape)
+[![Single File](https://img.shields.io/badge/bundle-single%20HTML%20612KB-6f42c1.svg)](#-delivery-shape)
 [![Zero Deps](https://img.shields.io/badge/runtime%20deps-0-blue.svg)](#-delivery-shape)
 
 [中文](README.md) · [Architecture](docs/ARCHITECTURE.md) · [Security](docs/SECURITY.md)
@@ -29,7 +29,7 @@ It started as "put my home game on my phone". Then it grew into something slight
 
 That sounds like over-engineering. It is. But it buys two real things:
 
-- **The deliverable is always one file** (`www/index.html`, 620KB). No node, no bundler, no CI needed to *run* it. Drop it on any static host, in a chat, or on a phone — it opens.
+- **The deliverable is always one file** (`www/index.html`, 612KB). No node, no bundler, no CI needed to *run* it. Drop it on any static host, in a chat, or on a phone — it opens.
 - **The source never turns into spaghetti.** Adding a feature? Edit `src/`, and the build tells you *"you used a symbol owned by `m6-map`, but `m3-ai` doesn't declare that dependency."* Not by convention — by failure.
 
 ---
@@ -46,7 +46,7 @@ That sounds like over-engineering. It is. But it buys two real things:
   ...
 依赖边: m0-core->m5-net  m1-character->m0-core  ...
   [info] 依赖环：m0-core ↔ m1-character ↔ ... (强连通分量 7 个模块，19 条边)
-产物: www/index.html  633979 B  md5=ab9b5b3b...
+产物: www/index.html  626363 B  md5=a585f992...
 ```
 
 The cycle it prints is **real and not hidden**. `m0-core`'s renderer reads the logged-in username (owned by `m5-net`), and `m5-net` calls the renderer back. Fully decoupling needs an event bus — that's a bigger refactor. Rather than pretend the architecture is clean, the build prints the cycle every time, and `modules.json` documents each reverse edge with *which line, why, and which batch will fix it*.
@@ -109,7 +109,7 @@ modules.json ──────────┘        ↑
 
 | Metric | Value |
 |---|---|
-| Artifact | **633,979 B single file (~620KB)** |
+| Artifact | **626,363 B single file (~612KB)** |
 | Runtime deps | **0** |
 | Source | 8 modules / 35 chunks / 395 top-level symbols |
 | Build deps | Node ≥ 18 (only `fs`/`path`/`crypto`) |
