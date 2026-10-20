@@ -6,7 +6,10 @@
 
 零框架 · 零构建依赖 · 双击即玩 · 自带 AI 守秘人 · 8 模块依赖图校验构建器
 
+### [▶ 在线试玩（无需安装、无需注册）](https://sunred-liu.github.io/silver-gate/)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
+[![CI](https://github.com/sunred-liu/silver-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/sunred-liu/silver-gate/actions/workflows/ci.yml)
 [![Single File](https://img.shields.io/badge/%E4%BA%A7%E7%89%A9-%E5%8D%95%20HTML%20620KB-6f42c1.svg)](#-交付形态)
 [![Zero Deps](https://img.shields.io/badge/%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BE%9D%E8%B5%96-0-blue.svg)](#-交付形态)
 [![Modules](https://img.shields.io/badge/%E6%A8%A1%E5%9D%97-8%20%2F%2035%20%E5%88%86%E5%9D%97-orange.svg)](docs/ARCHITECTURE.md)

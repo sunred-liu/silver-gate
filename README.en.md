@@ -6,7 +6,10 @@
 
 No framework · No runtime deps · Double-click to play · Built-in AI Keeper · 8-module dependency-graph-validating build
 
+### [▶ Play it live (no install, no signup)](https://sunred-liu.github.io/silver-gate/)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
+[![CI](https://github.com/sunred-liu/silver-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/sunred-liu/silver-gate/actions/workflows/ci.yml)
 [![Single File](https://img.shields.io/badge/bundle-single%20HTML%20620KB-6f42c1.svg)](#-delivery-shape)
 [![Zero Deps](https://img.shields.io/badge/runtime%20deps-0-blue.svg)](#-delivery-shape)
 
