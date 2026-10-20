@@ -10,7 +10,7 @@ No framework · No runtime deps · Double-click to play · Built-in AI Keeper ·
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 [![CI](https://github.com/sunred-liu/silver-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/sunred-liu/silver-gate/actions/workflows/ci.yml)
-[![Single File](https://img.shields.io/badge/bundle-single%20HTML%20612KB-6f42c1.svg)](#-delivery-shape)
+[![Single File](https://img.shields.io/badge/bundle-single%20HTML%20613KB-6f42c1.svg)](#-delivery-shape)
 [![Zero Deps](https://img.shields.io/badge/runtime%20deps-0-blue.svg)](#-delivery-shape)
 
 [中文](README.md) · [Architecture](docs/ARCHITECTURE.md) · [Security](docs/SECURITY.md)
@@ -29,7 +29,7 @@ It started as "put my home game on my phone". Then it grew into something slight
 
 That sounds like over-engineering. It is. But it buys two real things:
 
-- **All code lives in one HTML file** (`www/index.html`, 612KB: every module, every style, every view). No node, no bundler, no CI needed to *run* it. The style library, fonts and background art sit next to it as plain static files (see [Delivery shape](#delivery-shape)); if they're missing the UI degrades but the app still works.
+- **All code lives in one HTML file** (`www/index.html`, 613KB: every module, every style, every view). No node, no bundler, no CI needed to *run* it. The style library, fonts and background art sit next to it as plain static files (see [Delivery shape](#delivery-shape)); if they're missing the UI degrades but the app still works.
 - **The source never turns into spaghetti.** Adding a feature? Edit `src/`, and the build tells you *"you used a symbol owned by `m6-map`, but `m3-ai` doesn't declare that dependency."* Not by convention — by failure.
 
 ---
@@ -46,7 +46,7 @@ That sounds like over-engineering. It is. But it buys two real things:
   ...
 依赖边: m0-core->m5-net  m1-character->m0-core  ...
   [info] 依赖环：m0-core ↔ m1-character ↔ ... (强连通分量 7 个模块，19 条边)
-产物: www/index.html  626848 B  md5=edcc8ba5...
+产物: www/index.html  627520 B  md5=3d82ee91...
 ```
 
 The cycle it prints is **real and not hidden**. `m0-core`'s renderer reads the logged-in username (owned by `m5-net`), and `m5-net` calls the renderer back. Fully decoupling needs an event bus — that's a bigger refactor. Rather than pretend the architecture is clean, the build prints the cycle every time, and `modules.json` documents each reverse edge with *which line, why, and which batch will fix it*.
@@ -109,7 +109,7 @@ modules.json ──────────┘        ↑
 
 | Metric | Value |
 |---|---|
-| Code artifact | **626,848 B single HTML (~612KB)** — all 8 modules, styles, views |
+| Code artifact | **627,520 B single HTML (~613KB)** — all 8 modules, styles, views |
 | Static assets | `www/vendor/` 7.8MB (Tailwind 419KB + fonts 7.4MB) · `www/bg/` 11MB (5 backgrounds) |
 | Runtime deps | **0 npm packages** (Tailwind and fonts are local files, no CDN) |
 | Source | 8 modules / 35 chunks / 395 top-level symbols |

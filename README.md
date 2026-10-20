@@ -10,7 +10,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 [![CI](https://github.com/sunred-liu/silver-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/sunred-liu/silver-gate/actions/workflows/ci.yml)
-[![Single File](https://img.shields.io/badge/%E4%BA%A7%E7%89%A9-%E5%8D%95%20HTML%20612KB-6f42c1.svg)](#-交付形态)
+[![Single File](https://img.shields.io/badge/%E4%BA%A7%E7%89%A9-%E5%8D%95%20HTML%20613KB-6f42c1.svg)](#-交付形态)
 [![Zero Deps](https://img.shields.io/badge/%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BE%9D%E8%B5%96-0-blue.svg)](#-交付形态)
 [![Modules](https://img.shields.io/badge/%E6%A8%A1%E5%9D%97-8%20%2F%2035%20%E5%88%86%E5%9D%97-orange.svg)](docs/ARCHITECTURE.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
@@ -31,7 +31,7 @@
 
 这听起来像是过度设计。确实是。但这个"过度设计"换来了两件真实的好处：
 
-- **代码全部在一个 HTML 里**（`www/index.html`，612KB 承载所有逻辑、样式与视图）。不装 node、不跑 bundler、不配 CI，扔到任何静态服务器/网盘/手机里都能开。样式库、字体、背景图作为同目录静态资源随附（见[交付形态](#-交付形态)），缺失时页面会降级但仍可操作。
+- **代码全部在一个 HTML 里**（`www/index.html`，613KB 承载所有逻辑、样式与视图）。不装 node、不跑 bundler、不配 CI，扔到任何静态服务器/网盘/手机里都能开。样式库、字体、背景图作为同目录静态资源随附（见[交付形态](#-交付形态)），缺失时页面会降级但仍可操作。
 - **源码永远不会退化成意大利面**。想加功能？先改 `src/`，构建器会告诉你「你要用的这个符号属于 m6-map，但 m3-ai 没声明依赖它」。它不靠自觉，它靠报错。
 
 ---
@@ -57,7 +57,7 @@
 依赖边: m0-core->m5-net  m1-character->m0-core  m1-character->m2-dice  ...
   [info] 依赖环：m0-core ↔ m1-character ↔ m2-dice ↔ m3-ai ↔ m4-content ↔ m5-net ↔ m6-map
          （强连通分量 7 个模块，19 条边）
-产物: www/index.html  626848 B  md5=edcc8ba5...
+产物: www/index.html  627520 B  md5=3d82ee91...
 ```
 
 我最满意的是它**不假装自己是干净的**。上面那个 7 模块的依赖环是真实存在的：`m0-core` 的渲染器要读当前登录用户名（属于 `m5-net`），而 `m5-net` 又要调渲染器。真正的解耦需要事件总线或把 UI 回调上移一层，那是更大的重构。**与其把环藏起来，不如让构建器每次都把环打印出来**，并在 `modules.json` 里逐条登记反向边的成因（打开 `modules.json` 看 `m1-character.depends` 那段中文注释，写明了哪一行、为什么、留待哪个批次解决）。
@@ -131,7 +131,7 @@ modules.json ──────────┘        ↑
 
 | 指标 | 数值 |
 |---|---|
-| 代码产物 | **626,848 B（约 612KB）单 HTML**，含全部 8 模块、全部样式与视图 |
+| 代码产物 | **627,520 B（约 613KB）单 HTML**，含全部 8 模块、全部样式与视图 |
 | 静态资源 | `www/vendor/` 7.8MB（Tailwind 419KB + 字体 7.4MB）· `www/bg/` 11MB（5 张背景图） |
 | 运行时依赖 | **0 个 npm 包**（Tailwind 与字体是本地文件，不走 CDN） |
 | 源码模块 | 8 个 / 35 个分块 / 395 个顶层符号 |

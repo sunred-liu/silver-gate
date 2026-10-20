@@ -11,7 +11,16 @@
 (function(){try{
   if(!/^https?:$/.test(location.protocol)) return;
   var h=document.head||document.getElementsByTagName('head')[0]; if(!h) return;
-  var b=document.createElement('base'); b.href='/';
+  /* 基准 = 本站 index.html 所在目录，而不是站点根。
+     原先写死 '/'，在「域名根部署」下没问题，但换到任何子路径托管
+     （GitHub Pages 的 /<repo>/、对象存储的子目录、反向代理的 /app/）就会把
+     ./vendor/tailwind.js 解析成 /vendor/... → 404 → tailwind 未定义、样式全丢。
+     规则：路径以 / 结尾或最后一段带扩展名 → 取该目录；否则视为 SPA 深路由
+     （/c/<角色id>、/r/<房间>）回退到站点根。 */
+  var p = location.pathname || '/';
+  var dir = /\/$/.test(p) || /\.[a-z0-9]+$/i.test(p) ? p.replace(/[^\/]*$/, '') : '/';
+  if (!dir) dir = '/';
+  var b=document.createElement('base'); b.href=dir;
   h.insertBefore(b, h.firstChild);
 }catch(e){}})();
 </script>

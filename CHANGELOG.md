@@ -26,6 +26,7 @@
 - 新增 [`docs/SECURITY.md`](docs/SECURITY.md)，如实公开已知缺陷（无盐 djb2 密码哈希、token 存 localStorage、`innerHTML` 拼接、缺 CSP）
 
 ### 修复
+- **`<base>` 不再写死站点根**。骨架里的启动脚本原先把 `<base href="/">` 硬钉在域名根，在根部署下无碍，但换到任何子路径托管（GitHub Pages 的 `/<repo>/`、子目录、`/app/` 反向代理）就会把 `./vendor/tailwind.js` 解析成 `/vendor/...` → 404 → `tailwind is not defined`、整页样式尽失。现按 index.html 实际所在目录推导基准，SPA 深路由（`/c/<角色id>`）仍回退到站点根。
 - **补齐运行必需的静态资源**：`www/vendor/`（Tailwind 419KB + 字体 7.4MB）与 `www/bg/`（5 张背景图）
   此前未随仓库分发，导致在 GitHub Pages 上样式与图标全部 404、页面只剩骨架。
   README 中「单文件交付」的表述也已据实修正为「代码单 HTML + 同目录静态资源」。
